@@ -21,6 +21,8 @@ RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
 ENV SSH_PRIVATE_KEY_PATH salt/mf/mfeed_config/ssh_private_key
 
+USER git2consul
+
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
 CMD [   "--endpoint consul", \
