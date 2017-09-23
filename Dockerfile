@@ -22,10 +22,6 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
-ENV SSH_PRIVATE_KEY_PATH=git2consul/ssh_private_key \
-    CONFIG_JSON_PATH=git2consul/config \
-    GIT_SSH_HOST=github.com
-
 USER git2consul
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
