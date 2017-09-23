@@ -3,7 +3,7 @@ MAINTAINER Doug Clow @ MomentFeed
 
 # Needed for ssh-keyscan
 RUN apk update \
-    && apk add openssh
+    && apk add openssh-client
 
 # Install Consul
 RUN set -x \
@@ -23,7 +23,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
 ENV SSH_PRIVATE_KEY_PATH=git2consul/ssh_private_key \
-    CONFIG_JSON_PATH=git2consul/config
+    CONFIG_JSON_PATH=git2consul/config \
+    GIT_SSH_HOST=github.com
 
 USER git2consul
 

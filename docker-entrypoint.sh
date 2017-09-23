@@ -2,19 +2,17 @@
 set -x
 
 # optionally get ssh key from consul
-consul kv get $SSH_PRIVATE_KEY_PATH
-if [ $? == 0 ]; then
-    consul kv get $SSH_PRIVATE_KEY_PATH > /home/git2consul/.ssh/id_rsa
-    chmod 600 /home/git2consul/.ssh/id_rsa
+if [ -n $SSH_PRIVATE_KEY_PATH ]; then
+    consul kv get $SSH_PRIVATE_KEY_PATH > ~/.ssh/id_rsa
+    if [ $? != 0 ]; then 
+        exit 1 
+    fi
+    chmod 600 ~/.ssh/id_rsa
 fi
 
-# optionally get config.json from consul
-consul kv get $CONFIG_JSON_PATH
-if [ $? == 0 ]; then
-    consul kv get $CONFIG_JSON_PATH > /etc/git2consul.d/config.json
+# optionally trust the git repo
+if [ -n $GIT_SSH_HOST ]; then
+    ssh-keyscan $GIT_SSH_HOST > ~/.ssh/known_hosts
 fi
-
-# Trust the github ssh key
-ssh-keyscan github.com >> /git2consul/.ssh/known_hosts
 
 exec "$@"
