@@ -20,7 +20,8 @@ COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
-ENV SSH_PRIVATE_KEY_PATH salt/mf/mfeed_config/ssh_private_key
+ENV SSH_PRIVATE_KEY_PATH=salt/mf/mfeed_config/ssh_private_key \
+    CONFIG_JSON_PATH=/etc/git2consul.d/config.json
 
 USER git2consul
 
@@ -28,5 +29,4 @@ ENTRYPOINT [ "docker-entrypoint.sh" ]
 
 CMD [   "--endpoint consul", \
         "--port 8500", \
-        "--config-file /etc/git2consul.d/config.json" \
     ]
