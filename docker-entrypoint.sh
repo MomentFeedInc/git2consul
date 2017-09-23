@@ -14,4 +14,4 @@ if [ $? == 0 ]; then
     consul kv get $CONFIG_JSON_PATH > /etc/git2consul.d/config.json
 fi
 
-exec /usr/bin/node /usr/lib/node_modules/git2consul --config-file /etc/git2consul.d/config.json
+exec "$@"

@@ -1,6 +1,5 @@
-# mfeed_config_docker
-
 FROM cimpress/git2consul
+MAINTAINER Doug Clow @ MomentFeed
 
 RUN set -x \
     && wget -O /tmp/consul_0.9.3_linux_amd64.zip https://releases.hashicorp.com/consul/0.9.3/consul_0.9.3_linux_amd64.zip \
@@ -14,19 +13,17 @@ RUN adduser -h /home/git2consul -D git2consul \
     && chown git2consul /var/lib/git2consul_cache \
     && chown git2consul /etc/git2consul.d
 
-COPY git2consul.d/config.json /etc/git2consul.d/config.json
-
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
 
-ENV SSH_PRIVATE_KEY_PATH=salt/mf/mfeed_config/ssh_private_key \
-    CONFIG_JSON_PATH=/etc/git2consul.d/config.json
+ENV SSH_PRIVATE_KEY_PATH=git2consul/ssh_private_key \
+    CONFIG_JSON_PATH=git2consul/config
 
 USER git2consul
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
-CMD [   "--endpoint consul", \
-        "--port 8500", \
+CMD [   "/usr/bin/node", \
+        "/usr/lib/node_modules/git2consul", \
     ]
