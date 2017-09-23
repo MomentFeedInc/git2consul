@@ -14,4 +14,7 @@ if [ $? == 0 ]; then
     consul kv get $CONFIG_JSON_PATH > /etc/git2consul.d/config.json
 fi
 
+# Trust the github ssh key
+ssh-keyscan github.com >> /git2consul/.ssh/known_hosts
+
 exec "$@"

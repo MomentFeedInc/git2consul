@@ -1,6 +1,11 @@
 FROM cimpress/git2consul
 MAINTAINER Doug Clow @ MomentFeed
 
+# Needed for ssh-keyscan
+RUN apk update \
+    && apk add openssh
+
+# Install Consul
 RUN set -x \
     && wget -O /tmp/consul_0.9.3_linux_amd64.zip https://releases.hashicorp.com/consul/0.9.3/consul_0.9.3_linux_amd64.zip \
     && unzip -d /usr/bin /tmp/consul_0.9.3_linux_amd64.zip \
