@@ -25,5 +25,5 @@ USER git2consul
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 
 CMD [   "/usr/bin/node", \
-        "/usr/lib/node_modules/git2consul", \
+        "/usr/lib/node_modules/git2consul" \
     ]
