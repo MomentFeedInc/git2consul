@@ -6,10 +6,9 @@ RUN apk update \
     && apk add openssh-client
 
 # Install Consul
-RUN set -x \
-    && wget -O /tmp/consul_0.9.3_linux_amd64.zip https://releases.hashicorp.com/consul/0.9.3/consul_0.9.3_linux_amd64.zip \
-    && unzip -d /usr/bin /tmp/consul_0.9.3_linux_amd64.zip \
-    && rm /tmp/consul_0.9.3_linux_amd64.zip
+ADD https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip /tmp/
+RUN unzip -d /usr/bin /tmp/consul_1.0.7_linux_amd64.zip && \
+    rm /tmp/consul_1.0.7_linux_amd64.zip
 
 RUN adduser -h /home/git2consul -D git2consul \
     && mkdir /home/git2consul/.ssh \
@@ -18,13 +17,12 @@ RUN adduser -h /home/git2consul -D git2consul \
     && chown git2consul /var/lib/git2consul_cache \
     && chown git2consul /etc/git2consul.d
 
-COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-RUN ln -s usr/local/bin/docker-entrypoint.sh / # backwards compat
+COPY docker-entrypoint.sh /
+RUN chmod 755 /docker-entrypoint.sh
 
 USER git2consul
 
-ENTRYPOINT [ "docker-entrypoint.sh" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 CMD [   "/usr/bin/node", \
         "/usr/lib/node_modules/git2consul" \
