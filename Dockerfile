@@ -1,4 +1,4 @@
-FROM cimpress/git2consul
+FROM cimpress/git2consul:0.12.13
 MAINTAINER Doug Clow @ MomentFeed
 
 # Needed for ssh-keyscan
