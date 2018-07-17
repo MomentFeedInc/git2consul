@@ -1,9 +1,15 @@
-FROM cimpress/git2consul:0.12.13
+FROM alpine
 MAINTAINER Doug Clow @ MomentFeed
 
-# Needed for ssh-keyscan
-RUN apk update \
-    && apk add openssh-client
+# Install deps
+RUN apk --update add \
+    nodejs nodejs-current-npm git openssh ca-certificates \
+    openssh-client tini \
+    && rm -rf /var/cache/apk/*
+
+# Install git2consul
+RUN npm install git2consul@0.12.13 --global \
+    && mkdir -p /etc/git2consul.d
 
 # Install Consul
 ADD https://releases.hashicorp.com/consul/1.0.7/consul_1.0.7_linux_amd64.zip /tmp/
@@ -22,7 +28,7 @@ RUN chmod 755 /docker-entrypoint.sh
 
 USER git2consul
 
-ENTRYPOINT [ "/docker-entrypoint.sh" ]
+ENTRYPOINT [ "/sbin/tini", "--", "/docker-entrypoint.sh" ]
 
 CMD [   "/usr/bin/node", \
         "/usr/lib/node_modules/git2consul" \
